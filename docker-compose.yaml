@@ -4,7 +4,6 @@ version: '3.8'
 services:
     # PHP Service
     laravel_10:
-      
       build:
         context: ./project
         dockerfile: ../php/Dockerfile
@@ -30,7 +29,27 @@ services:
         - 80:80
       networks:
         - local-bridge
+      
 
+    # MYSQL Service
+    mysql_database:
+      image: mysql:8.0
+      container_name: mysql_container
+      restart: always
+      environment:
+        MYSQL_DATABASE: docker-test
+        MYSQL_USER: 'ufuk'
+        MYSQL_PASSWORD:
+        MYSQL_ROOT_PASSWORD:
+        MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      command: --default-authentication-plugin=mysql_native_password
+      ports:
+        - "3306:3306"
+      volumes:
+        - ./database/mysql/mysql_8_1_0_data:/var/lib/mysql
+      networks:
+        - local-bridge
+          
 
 networks:
   local-bridge:

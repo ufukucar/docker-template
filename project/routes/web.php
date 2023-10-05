@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +15,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    dd(bcrypt('123456'));
     return view('welcome');
+});
+
+
+Route::get('/user', function() {
+
+    $data = User::first();
+
+    dd($data->name);
+
+
 });
