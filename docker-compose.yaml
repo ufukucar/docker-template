@@ -1,0 +1,53 @@
+version: '3.8'
+
+  #PHP ile NGINC kurulumu
+services:
+    # PHP Service
+    php_8_2:
+      image: php:8.2-fpm
+      container_name: php_8_2
+      tty: true
+      working_dir: /var/www
+      volumes:
+        - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+        - ./project/:/var/www
+      networks:
+        - local-bridge
+
+    # NGINX Service
+    nginx:
+      image: nginx:alpine
+      container_name: nginx
+      tty: true
+      volumes:
+        - ./project/:/var/www
+        - ./nginx/conf.d/:/etc/nginx/conf.d/
+      ports:
+        - 80:80
+      networks:
+        - local-bridge
+
+
+networks:
+  local-bridge:
+    driver: bridge
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
