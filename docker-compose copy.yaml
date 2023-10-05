@@ -3,13 +3,9 @@ version: '3.8'
   #LARAVEL (PHP 8.2) ile NGINC kurulumu
 services:
     # PHP Service
-    laravel_10:
-      
-      build:
-        context: ./project
-        dockerfile: ../php/Dockerfile
-      image: laravel_10
-      container_name: laravel_10
+    php_8_2:
+      image: php:8.2-fpm
+      container_name: php_8_2
       tty: true
       working_dir: /var/www
       volumes:
