@@ -22,6 +22,8 @@ Route::get('/', function () {
 
 Route::get('/user', function() {
 
+ 
+
     $data = User::first();
 
     dd($data->name);

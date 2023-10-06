@@ -12,7 +12,7 @@ RUN apt update && apt install -y curl nano git \
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd opcache
 
 # Install composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
@@ -24,6 +24,8 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 WORKDIR /var/www
 
 COPY  . /var/www
+
+
 
 # php fpm in default portu 9000'dir. NGINX bu 9000 portundan fpm e ulaşabilecek
 EXPOSE 9000
