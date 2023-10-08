@@ -21,9 +21,9 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && mv composer.phar /usr/local/bin/composer
 
 # yaml dosyasında laravel kısmında ne yazdıysak onu girmeliyiz
-WORKDIR /var/www
+WORKDIR /var/www/api
 
-COPY  . /var/www
+COPY  . /var/www/api
 
 
 

@@ -1,21 +1,7 @@
 version: '3.8'
 
-  #LARAVEL (PHP 8.2) ile NGINC kurulumu
 services:
-    # PHP Service
-    laravel_10:
-      build:
-        context: ./project
-        dockerfile: ../php/Dockerfile
-      image: laravel_10
-      container_name: laravel_10
-      tty: true
-      working_dir: /var/www
-      volumes:
-        - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
-        - ./project/:/var/www
-      networks:
-        - local-bridge
+  
 
     # NGINX Service
     nginx:
@@ -23,13 +9,56 @@ services:
       container_name: nginx
       tty: true
       volumes:
-        - ./project/:/var/www
-        - ./nginx/conf.d/:/etc/nginx/conf.d/
+        - ./_api/:/var/www/api
+        - ./_front/:/var/www/public
+        - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
       ports:
-        - 80:80
+        - "80:80"
       networks:
         - local-bridge
-      
+      depends_on:
+        - react-app
+        - api
+
+
+    # React Service
+    react-app:
+      build:
+        context: ./_front
+        dockerfile: ../docker/public/Dockerfile
+      image: react-app
+      container_name: react-app
+      tty: true
+      volumes:
+        - ./_front/:/var/www/public
+        - /var/www/public/node_modules/
+      environment:
+        - NODE_ENV=development
+      ports:
+        - "5173:5173"
+      networks:
+        - local-bridge
+
+  
+    # PHP Service
+    api:
+      build:
+        context: ./_api
+        dockerfile: ../docker/php/Dockerfile
+      image: api
+      container_name: api
+      tty: true
+      working_dir: /var/www/api
+      volumes:
+        - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+        - ./_api/:/var/www/api
+      ports:
+        - "8000:8000"
+      networks:
+        - local-bridge
+
+
+
 
     # MYSQL Service
     mysql_database:

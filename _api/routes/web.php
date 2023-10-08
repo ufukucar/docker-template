@@ -15,18 +15,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    dd(bcrypt('123456'));
+
     return view('welcome');
 });
 
 
 Route::get('/user', function() {
 
- 
+
 
     $data = User::first();
 
-    dd($data->name);
+    dd($data->name . " benim adım");
 
 
 });
