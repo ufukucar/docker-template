@@ -1,6 +1,6 @@
 FROM node:alpine
 
-WORKDIR /var/www/public
+WORKDIR /var/www/panel
 
 COPY package*.json ./
 
@@ -12,4 +12,3 @@ COPY . .
 EXPOSE 5173
 
 CMD ["npm", "run", "dev"]
-

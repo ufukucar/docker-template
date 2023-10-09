@@ -1,88 +1,90 @@
 version: '3.8'
 
 services:
-  
 
-    # NGINX Service
-    nginx:
-      image: nginx:alpine
-      container_name: nginx
-      tty: true
-      volumes:
-        - ./_api/:/var/www/api
-        - ./_front/:/var/www/public
-        - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
-      ports:
-        - "80:80"
-      networks:
-        - local-bridge
-      depends_on:
-        - react-app
-        - api
+  # NGINX Service
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    tty: true
+    volumes:
+      - ./_api/:/var/www/api
+      - ./_panel/:/var/www/panel
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+    ports:
+      - "80:80"
+    networks:
+      - local_bridge
+    depends_on:
+      - react_app
+      - api
 
 
-    # React Service
-    react-app:
-      build:
-        context: ./_front
-        dockerfile: ../docker/public/Dockerfile
-      image: react-app
-      container_name: react-app
-      tty: true
-      volumes:
-        - ./_front/:/var/www/public
-        - /var/www/public/node_modules/
-      environment:
-        - NODE_ENV=development
-      ports:
-        - "5173:5173"
-      networks:
-        - local-bridge
+  # React Service
+  react_app:
+    build:
+      context: ./_panel
+      dockerfile: ../docker/panel/Dockerfile
+    image: react_app
+    container_name: react_app
+    tty: true
+    volumes:
+      - ./_panel/:/var/www/panel
+      - /var/www/panel/node_modules/
+    environment:
+      - NODE_ENV=development
+    ports:
+      - "5173:5173"
+    networks:
+      - local_bridge
 
-  
-    # PHP Service
-    api:
-      build:
-        context: ./_api
-        dockerfile: ../docker/php/Dockerfile
-      image: api
-      container_name: api
-      tty: true
-      working_dir: /var/www/api
-      volumes:
-        - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
-        - ./_api/:/var/www/api
-      ports:
-        - "8000:8000"
-      networks:
-        - local-bridge
+
+  # PHP Service
+  api:
+    build:
+      context: ./_api
+      dockerfile: ../docker/php/Dockerfile
+    image: api
+    container_name: api
+    tty: true
+    working_dir: /var/www/api
+    volumes:
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./_api/:/var/www/api
+    ports:
+      - "8000:8000"
+    networks:
+      - local_bridge
+
+
 
 
 
 
     # MYSQL Service
-    mysql_database:
-      image: mysql:8.0
-      container_name: mysql_container
-      restart: always
-      environment:
-        MYSQL_DATABASE: docker-test
-        MYSQL_USER: 'ufuk'
-        MYSQL_PASSWORD:
-        MYSQL_ROOT_PASSWORD:
-        MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-      command: --default-authentication-plugin=mysql_native_password
-      ports:
-        - "3306:3306"
-      volumes:
-        - ./database/mysql/mysql_8_1_0_data:/var/lib/mysql
-      networks:
-        - local-bridge
-          
+  mysql_database:
+    image: mysql:8.0
+    container_name: mysql_container
+    restart: always
+    environment:
+      MYSQL_DATABASE: docker-test
+      MYSQL_USER: 'ufuk'
+      MYSQL_PASSWORD:
+      MYSQL_ROOT_PASSWORD:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./database/mysql/mysql_8_1_0_data:/var/lib/mysql
+    networks:
+      - local_bridge
+
 
 networks:
-  local-bridge:
+  local_bridge:
     driver: bridge
+
 
 
 
